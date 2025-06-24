@@ -29,25 +29,29 @@ print(data.isnull().sum())
 # and performing exploratory data analysis (EDA) to uncover patterns and insights.
 
 # Step 6: Data Cleaning
-# Handle Missing Values
-# Option 1: Drop rows with missing values
-data.dropna(inplace=True)
 
-# Option 2: Fill missing values with a specific value (e.g., mean, median)
-# Example: Fill numerical columns with their mean
-data.fillna(data.mean(), inplace=True)
+# Handle Missing Values
+# Fill missing values with the mean of each numeric column
+numeric_cols = data.select_dtypes(include=['number']).columns
+data[numeric_cols] = data[numeric_cols].fillna(data[numeric_cols].mean())
 
 # Correct Data Types
 # Example: Convert date columns to datetime
-data['date_column'] = pd.to_datetime(data['date_column'])
+data['Transaction Date'] = pd.to_datetime(data['Transaction Date'], errors='coerce')
 
 # Address Inconsistencies
 # Example: Standardize categorical values
-data['category_column'] = data['category_column'].str.lower()
+# data['category_column'] = data['category_column'].str.lower()
 
 # Replace non-numeric entries in 'Total Spent' with NaN
 # This will allow us to handle them during data cleaning
 data['Total Spent'] = pd.to_numeric(data['Total Spent'], errors='coerce')
+
+# Option 1: Drop rows where 'Transaction Date' could not be parsed
+data = data.dropna(subset=['Transaction Date'])
+
+# Option 2: If you want to keep them, you can fill or flag them as needed
+# data['Transaction Date'].fillna(method='ffill', inplace=True)  # Example: forward fill
 
 # Proceed with the rest of the analysis
 
@@ -55,8 +59,8 @@ data['Total Spent'] = pd.to_numeric(data['Total Spent'], errors='coerce')
 
 # Visualize Data
 # Example: Plot a histogram of a numerical column
-plt.hist(data['numerical_column'], bins=20)
-plt.title('Distribution of Numerical Column')
+plt.hist(data['Total Spent'], bins=20)
+plt.title('Distribution of Total Spent')
 plt.xlabel('Value')
 plt.ylabel('Frequency')
 plt.show()
@@ -64,13 +68,13 @@ plt.show()
 # Note: Add more visualizations and analyses as needed to uncover patterns and insights.
 
 # Ensure plots are displayed in a clean and organized manner
-plt.style.use('seaborn-darkgrid')
+print(plt.style.available)
 
 # Step 8: Sales Over Time
 
 # Line Chart for total sales over time
 # Assuming 'Transaction Date' is already converted to datetime
-# data['Transaction Date'] = pd.to_datetime(data['Transaction Date'])
+data['Transaction Date'] = pd.to_datetime(data['Transaction Date'])
 data['Total Spent'] = pd.to_numeric(data['Total Spent'], errors='coerce')
 
 daily_sales = data.groupby('Transaction Date')['Total Spent'].sum()
@@ -176,8 +180,11 @@ plt.show()
 
 # Correlation Matrix for numerical variables
 plt.figure(figsize=(10, 8))
-corr_matrix = data.corr()
+corr_matrix = data.select_dtypes(include='number').corr()
 sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f')
 plt.title('Correlation Matrix of Numerical Variables')
 plt.tight_layout()
-plt.show() 
+plt.show()
+
+# Ensure plots are displayed in a clean and organized manner
+print(plt.style.available)
