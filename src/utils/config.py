@@ -33,6 +33,7 @@ class AnalysisConfig(BaseModel):
 
 class VisualizationConfig(BaseModel):
     """Visualization settings."""
+    charts_dir: str = "charts"
     colors: Dict[str, str] = Field(default_factory=lambda: {
         "primary": "#2E86AB",
         "secondary": "#A23B72", 
@@ -214,4 +215,14 @@ def get_analysis_config() -> AnalysisConfig:
 
 def get_visualization_config() -> VisualizationConfig:
     """Get visualization configuration."""
-    return config_manager.get_visualization_config() 
+    return config_manager.get_visualization_config()
+
+
+def get_logging_config() -> LoggingConfig:
+    """Get logging configuration."""
+    return config_manager.get_logging_config()
+
+
+def get_dashboard_config() -> DashboardConfig:
+    """Get dashboard configuration."""
+    return config_manager.get_dashboard_config() 

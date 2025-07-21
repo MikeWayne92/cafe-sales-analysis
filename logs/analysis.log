@@ -1,0 +1,17 @@
+2025-07-20 23:24:35 - cafe_analytics - [32mINFO[0m - Starting Cafe Sales Analysis Pipeline
+2025-07-20 23:24:35 - cafe_analytics - [32mINFO[0m - Starting data loading and validation
+2025-07-20 23:24:35 - cafe_analytics - [32mINFO[0m - Data loading completed successfully
+2025-07-20 23:24:35 - cafe_analytics - [32mINFO[0m - Completed data loading and validation in 0.02s
+2025-07-20 23:24:35 - cafe_analytics - [32mINFO[0m - Starting visualization generation
+2025-07-20 23:24:35 - cafe_analytics - [31mERROR[0m - Failed visualization generation after 0.07s
+2025-07-20 23:24:35 - cafe_analytics - [31mERROR[0m - Visualization generation failed: 'VisualizationConfig' object has no attribute 'charts_dir'
+2025-07-20 23:24:35 - cafe_analytics - [31mERROR[0m - Analysis failed!
+2025-07-20 23:26:59 - cafe_analytics - [32mINFO[0m - Starting Cafe Sales Analysis Pipeline
+2025-07-20 23:26:59 - cafe_analytics - [32mINFO[0m - Starting data loading and validation
+2025-07-20 23:26:59 - cafe_analytics - [32mINFO[0m - Data loading completed successfully
+2025-07-20 23:26:59 - cafe_analytics - [32mINFO[0m - Completed data loading and validation in 0.02s
+2025-07-20 23:26:59 - cafe_analytics - [32mINFO[0m - Starting visualization generation
+2025-07-20 23:27:00 - cafe_analytics - [32mINFO[0m - Visualization generation completed. Saved 5 charts in ['html'] format(s)
+2025-07-20 23:27:00 - cafe_analytics - [32mINFO[0m - Completed visualization generation in 0.12s
+2025-07-20 23:27:00 - cafe_analytics - [32mINFO[0m - Analysis pipeline completed successfully!
+2025-07-20 23:27:00 - cafe_analytics - [32mINFO[0m - Analysis completed successfully!
