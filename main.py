@@ -187,6 +187,9 @@ Examples:
   
   # Only launch dashboard
   python main.py --dashboard
+  
+  # Prepare GitHub Pages deployment
+  python main.py --github-pages
         """
     )
     
@@ -228,6 +231,12 @@ Examples:
         help='Enable verbose logging'
     )
     
+    parser.add_argument(
+        '--github-pages', 
+        action='store_true',
+        help='Prepare files for GitHub Pages deployment'
+    )
+    
     args = parser.parse_args()
     
     # Set up logging level
@@ -258,6 +267,20 @@ Examples:
         elif args.dashboard:
             # Only launch dashboard
             success = pipeline.run_dashboard()
+        elif args.github_pages:
+            # Prepare GitHub Pages deployment
+            print("🚀 Preparing GitHub Pages deployment...")
+            try:
+                from scripts.prepare_github_pages import prepare_github_pages
+                prepare_github_pages()
+                print("✅ GitHub Pages preparation completed successfully!")
+                success = True
+            except ImportError:
+                print("❌ Error: Could not import GitHub Pages preparation script")
+                success = False
+            except Exception as e:
+                print(f"❌ Error during GitHub Pages preparation: {e}")
+                success = False
         else:
             # Default: run full pipeline without dashboard
             success = pipeline.run_full_pipeline(save_formats=args.formats)

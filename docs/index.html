@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☕ Cafe Sales Analytics Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #2E86AB;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .last-updated {
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2E86AB;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 1rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chart-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .chart-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2E86AB;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .chart-description {
+            color: #666;
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 600px;
+            margin: 0 auto;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .nav-tab {
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: #2E86AB;
+            color: white;
+        }
+
+        .chart-content {
+            display: none;
+        }
+
+        .chart-content.active {
+            display: block;
+        }
+
+        .insights-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .insight-card h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .footer a {
+            color: #2E86AB;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>☕ Cafe Sales Analytics Dashboard</h1>
+        <p>Interactive analysis of cafe sales performance and trends</p>
+        <div class="last-updated">Last updated: <span id="lastUpdated"></span></div>
+    </div>
+
+    <div class="container">
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">$84,763</div>
+                <div class="metric-label">Total Revenue</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">10,000</div>
+                <div class="metric-label">Total Transactions</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">$8.48</div>
+                <div class="metric-label">Average Transaction</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">4</div>
+                <div class="metric-label">Active Locations</div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showChart('sales-trend')">📈 Sales Trends</button>
+            <button class="nav-tab" onclick="showChart('product-performance')">🍽️ Product Performance</button>
+            <button class="nav-tab" onclick="showChart('time-heatmap')">⏰ Time Analysis</button>
+            <button class="nav-tab" onclick="showChart('location-analysis')">📍 Location Performance</button>
+            <button class="nav-tab" onclick="showChart('payment-methods')">💳 Payment Methods</button>
+            <button class="nav-tab" onclick="showChart('insights')">💡 Insights</button>
+        </div>
+
+        <!-- Sales Trends Chart -->
+        <div id="sales-trend" class="chart-content active">
+            <div class="chart-section">
+                <h2 class="chart-title">📈 Sales Performance Over Time</h2>
+                <p class="chart-description">Daily revenue trends and transaction volume patterns showing business performance throughout the year.</p>
+                <div id="sales-trend-chart" class="chart-container">
+                    <div class="loading">Loading sales trend chart...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Performance Chart -->
+        <div id="product-performance" class="chart-content">
+            <div class="chart-section">
+                <h2 class="chart-title">🍽️ Product Performance Analysis</h2>
+                <p class="chart-description">Multi-dimensional analysis of product performance including revenue, units sold, and average pricing.</p>
+                <div id="product-performance-chart" class="chart-container">
+                    <div class="loading">Loading product performance chart...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Heatmap Chart -->
+        <div id="time-heatmap" class="chart-content">
+            <div class="chart-section">
+                <h2 class="chart-title">⏰ Sales Heatmap by Day and Hour</h2>
+                <p class="chart-description">Interactive heatmap showing peak sales hours and days to optimize business operations.</p>
+                <div id="time-heatmap-chart" class="chart-container">
+                    <div class="loading">Loading time heatmap chart...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Analysis Chart -->
+        <div id="location-analysis" class="chart-content">
+            <div class="chart-section">
+                <h2 class="chart-title">📍 Location Performance Analysis</h2>
+                <p class="chart-description">Geographic performance comparison and store efficiency metrics across all locations.</p>
+                <div id="location-analysis-chart" class="chart-container">
+                    <div class="loading">Loading location analysis chart...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Methods Chart -->
+        <div id="payment-methods" class="chart-content">
+            <div class="chart-section">
+                <h2 class="chart-title">💳 Payment Method Analysis</h2>
+                <p class="chart-description">Payment preference trends and transaction value analysis by payment type.</p>
+                <div id="payment-methods-chart" class="chart-container">
+                    <div class="loading">Loading payment methods chart...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insights Section -->
+        <div id="insights" class="chart-content">
+            <div class="insights-section">
+                <h2 class="chart-title">💡 Automated Business Insights</h2>
+                <p class="chart-description">AI-generated insights and recommendations based on the sales data analysis.</p>
+                
+                <div class="insight-card">
+                    <h4>💡 Insight 1</h4>
+                    <p>Average daily revenue is $232.23, indicating consistent business performance throughout the year.</p>
+                </div>
+                
+                <div class="insight-card">
+                    <h4>💡 Insight 2</h4>
+                    <p>'Coffee' is the highest-grossing product with $25,429.00 in sales, representing 30% of total revenue.</p>
+                </div>
+                
+                <div class="insight-card">
+                    <h4>💡 Insight 3</h4>
+                    <p>Peak sales hour is 14:00 with highest revenue generation, suggesting optimal timing for promotions.</p>
+                </div>
+                
+                <div class="insight-card">
+                    <h4>💡 Insight 4</h4>
+                    <p>'Downtown' is the best-performing location with $28,456.00 in revenue, 33.6% of total sales.</p>
+                </div>
+                
+                <div class="insight-card">
+                    <h4>💡 Insight 5</h4>
+                    <p>'Digital Wallet' is the most preferred payment method among customers, indicating modern payment trends.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Built with ❤️ for data-driven cafe management | 
+        <a href="https://github.com/MikeWayne92/cafe-sales-analysis" target="_blank">View Source Code</a> | 
+        <a href="#" onclick="showChart('insights')">View Full Analysis</a></p>
+    </div>
+
+    <script>
+        // Set last updated date
+        document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        // Tab navigation
+        function showChart(chartId) {
+            // Hide all chart contents
+            document.querySelectorAll('.chart-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected chart content
+            document.getElementById(chartId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Load charts from the generated HTML files
+        async function loadChart(chartId, chartElementId) {
+            try {
+                const response = await fetch(`../charts/${chartId}.html`);
+                if (response.ok) {
+                    const html = await response.text();
+                    // Extract the Plotly chart data from the HTML
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const plotlyDiv = doc.querySelector('#chart');
+                    if (plotlyDiv) {
+                        document.getElementById(chartElementId).innerHTML = plotlyDiv.innerHTML;
+                    } else {
+                        document.getElementById(chartElementId).innerHTML = '<div class="error">Chart not found. Please run the analysis to generate charts.</div>';
+                    }
+                } else {
+                    document.getElementById(chartElementId).innerHTML = '<div class="error">Chart file not found. Please run the analysis to generate charts.</div>';
+                }
+            } catch (error) {
+                document.getElementById(chartElementId).innerHTML = '<div class="error">Error loading chart: ' + error.message + '</div>';
+            }
+        }
+
+        // Load all charts when page loads
+        window.addEventListener('load', function() {
+            // Load charts (these will show error messages if charts aren't available)
+            loadChart('sales_trend', 'sales-trend-chart');
+            loadChart('product_performance', 'product-performance-chart');
+            loadChart('time_heatmap', 'time-heatmap-chart');
+            loadChart('location_analysis', 'location-analysis-chart');
+            loadChart('payment_methods', 'payment-methods-chart');
+        });
+    </script>
+</body>
+</html> 
