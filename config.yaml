@@ -1,0 +1,111 @@
+# Cafe Sales Analysis Configuration
+# This file contains all configurable parameters for the analysis
+
+# Data Configuration
+data:
+  input_file: "dirty_cafe_sales.csv"
+  output_dir: "output"
+  charts_dir: "charts"
+  reports_dir: "reports"
+  
+# Analysis Parameters
+analysis:
+  # Date range for analysis (leave empty for all data)
+  start_date: null
+  end_date: null
+  
+  # Sales analysis
+  min_transaction_amount: 0.01
+  max_transaction_amount: 1000.0
+  
+  # Time-based analysis
+  business_hours:
+    start: "06:00"
+    end: "22:00"
+  
+  # Product categories for grouping
+  product_categories:
+    coffee: ["espresso", "latte", "cappuccino", "americano", "mocha"]
+    food: ["sandwich", "pastry", "cake", "cookie", "muffin"]
+    drinks: ["juice", "smoothie", "tea", "water"]
+    other: ["merchandise", "gift card"]
+
+# Visualization Settings
+visualization:
+  # Color schemes
+  colors:
+    primary: "#2E86AB"
+    secondary: "#A23B72"
+    accent: "#F18F01"
+    success: "#C73E1D"
+    neutral: "#F8F9FA"
+    
+  # Chart styling
+  style:
+    background_color: "#FFFFFF"
+    grid_color: "#E9ECEF"
+    font_family: "Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+    
+  # Chart dimensions
+  dimensions:
+    small: [8, 6]
+    medium: [12, 8]
+    large: [16, 10]
+    
+  # Interactive features
+  interactive:
+    enable_hover: true
+    enable_zoom: true
+    enable_pan: true
+    enable_selection: true
+
+# Dashboard Configuration
+dashboard:
+  title: "Cafe Sales Analytics Dashboard"
+  theme: "light"
+  refresh_interval: 300  # seconds
+  max_data_points: 10000
+  
+# API Configuration
+api:
+  host: "0.0.0.0"
+  port: 8000
+  debug: false
+  cors_origins: ["*"]
+  
+# Database Configuration (for future use)
+database:
+  type: "sqlite"  # sqlite, postgresql, mysql
+  host: "localhost"
+  port: 5432
+  name: "cafe_analytics"
+  user: "analyst"
+  password: ""
+  
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/analysis.log"
+  
+# Performance Settings
+performance:
+  cache_enabled: true
+  cache_ttl: 3600  # seconds
+  parallel_processing: true
+  max_workers: 4
+  
+# Reporting Configuration
+reporting:
+  format: ["html", "pdf"]  # html, pdf, excel
+  include_charts: true
+  include_insights: true
+  auto_generate: true
+  
+# Alerting Configuration
+alerts:
+  enabled: true
+  thresholds:
+    sales_drop_percentage: 20
+    unusual_transaction_amount: 500
+    low_stock_threshold: 10 
