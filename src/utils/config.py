@@ -35,11 +35,15 @@ class VisualizationConfig(BaseModel):
     """Visualization settings."""
     charts_dir: str = "charts"
     colors: Dict[str, str] = Field(default_factory=lambda: {
-        "primary": "#2E86AB",
-        "secondary": "#A23B72", 
-        "accent": "#F18F01",
-        "success": "#C73E1D",
-        "neutral": "#F8F9FA"
+        "primary": "#582f0e",      # Seal Brown - Main brand color
+        "secondary": "#7f4f24",    # Russet - Secondary elements
+        "accent": "#936639",       # Raw Umber - Accent highlights
+        "success": "#656d4a",      # Reseda Green - Success indicators
+        "neutral": "#b6ad90",      # Khaki - Neutral backgrounds
+        "text_dark": "#333d29",    # Black Olive - Dark text
+        "text_light": "#c2c5aa",   # Sage - Light text
+        "background": "#a68a64",   # Lion - Background elements
+        "highlight": "#a4ac86"     # Sage-2 - Highlight elements
     })
     style: Dict[str, str] = Field(default_factory=lambda: {
         "background_color": "#FFFFFF",

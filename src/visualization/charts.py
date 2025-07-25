@@ -61,7 +61,7 @@ class ChartStyler:
             'font': {
                 'family': self.style['font_family'],
                 'size': 12,
-                'color': '#2C3E50'
+                'color': '#333d29'
             },
             'margin': {'l': 60, 'r': 60, 't': 80, 'b': 60},
             'width': width,
@@ -86,16 +86,16 @@ class ChartStyler:
             List of color hex codes
         """
         base_colors = [
-            self.colors['primary'],
-            self.colors['secondary'],
-            self.colors['accent'],
-            self.colors['success'],
-            '#6C5CE7',  # Purple
-            '#00B894',  # Green
-            '#FDCB6E',  # Yellow
-            '#E17055',  # Orange
-            '#74B9FF',  # Blue
-            '#A29BFE'   # Light Purple
+            self.colors['primary'],      # Seal Brown
+            self.colors['secondary'],    # Russet
+            self.colors['accent'],       # Raw Umber
+            self.colors['success'],      # Reseda Green
+            self.colors['neutral'],      # Khaki
+            '#a68a64',                   # Lion
+            '#c2c5aa',                   # Sage
+            '#a4ac86',                   # Sage-2
+            '#8B7355',                   # Darker Brown (for contrast)
+            '#9CAF88'                    # Lighter Sage (for variety)
         ]
         
         if n_colors <= len(base_colors):
@@ -329,7 +329,7 @@ class InteractiveCharts:
                 z=heatmap_data.values,
                 x=heatmap_data.columns,
                 y=heatmap_data.index,
-                colorscale='Viridis',
+                colorscale='Earth',
                 hovertemplate='<b>%{y} at %{x}:00</b><br>Revenue: $%{z:,.2f}<extra></extra>',
                 colorbar=dict(title="Revenue ($)")
             ))
