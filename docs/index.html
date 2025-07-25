@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>☕ Cafe Sales Analytics Dashboard</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -396,22 +397,24 @@
         // Load charts from the generated HTML files
         async function loadChart(chartId, chartElementId) {
             try {
-                const response = await fetch(`${chartId}.html`);
-                if (response.ok) {
-                    const html = await response.text();
-                    // Extract the body content from the chart HTML
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    const body = doc.querySelector('body');
-                    if (body) {
-                        document.getElementById(chartElementId).innerHTML = body.innerHTML;
-                    } else {
-                        document.getElementById(chartElementId).innerHTML = '<div class="error">Chart not found. Please run the analysis to generate charts.</div>';
-                    }
-                } else {
-                    document.getElementById(chartElementId).innerHTML = '<div class="error">Chart file not found. Please run the analysis to generate charts.</div>';
-                }
+                console.log(`Loading chart: ${chartId}.html`);
+                
+                // Try iframe approach first (more reliable for standalone HTML files)
+                const iframe = document.createElement('iframe');
+                iframe.src = `${chartId}.html`;
+                iframe.style.width = '100%';
+                iframe.style.height = '600px';
+                iframe.style.border = 'none';
+                iframe.style.borderRadius = '10px';
+                
+                const container = document.getElementById(chartElementId);
+                container.innerHTML = '';
+                container.appendChild(iframe);
+                
+                console.log(`Chart loaded via iframe: ${chartId}.html`);
+                
             } catch (error) {
+                console.error(`Error loading chart: ${error.message}`);
                 document.getElementById(chartElementId).innerHTML = '<div class="error">Error loading chart: ' + error.message + '</div>';
             }
         }
