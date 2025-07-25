@@ -265,7 +265,40 @@ The platform is optimized for performance:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🆘 Support
+## 🆘 Support & Troubleshooting
+
+### **GitHub Pages Issues**
+
+If you encounter "Chart file not found" errors on the GitHub Pages site:
+
+1. **Quick Fix**: Run the automated update script:
+   ```bash
+   python3 scripts/update_github_pages.py
+   ```
+
+2. **Manual Fix**: 
+   ```bash
+   # Generate charts
+   python3 main.py
+   
+   # Prepare GitHub Pages
+   python3 scripts/prepare_github_pages.py
+   
+   # Commit and push
+   git add docs/
+   git commit -m "Update GitHub Pages"
+   git push origin main
+   ```
+
+3. **Verify**: Check that chart files exist in the `docs/` directory
+
+### **Common Issues**
+
+- **Charts not loading**: Ensure chart files are copied to `docs/` directory
+- **Path errors**: Verify relative paths in `docs/index.html` are correct
+- **Deployment delays**: GitHub Pages may take 5-10 minutes to update
+
+### **Getting Help**
 
 For support and questions:
 - Create an issue on GitHub
