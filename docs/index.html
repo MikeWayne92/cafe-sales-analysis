@@ -399,12 +399,12 @@
                 const response = await fetch(`${chartId}.html`);
                 if (response.ok) {
                     const html = await response.text();
-                    // Extract the Plotly chart data from the HTML
+                    // Extract the body content from the chart HTML
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
-                    const plotlyDiv = doc.querySelector('#chart');
-                    if (plotlyDiv) {
-                        document.getElementById(chartElementId).innerHTML = plotlyDiv.innerHTML;
+                    const body = doc.querySelector('body');
+                    if (body) {
+                        document.getElementById(chartElementId).innerHTML = body.innerHTML;
                     } else {
                         document.getElementById(chartElementId).innerHTML = '<div class="error">Chart not found. Please run the analysis to generate charts.</div>';
                     }
