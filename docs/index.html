@@ -396,7 +396,7 @@
         // Load charts from the generated HTML files
         async function loadChart(chartId, chartElementId) {
             try {
-                const response = await fetch(`../charts/${chartId}.html`);
+                const response = await fetch(`${chartId}.html`);
                 if (response.ok) {
                     const html = await response.text();
                     // Extract the Plotly chart data from the HTML
